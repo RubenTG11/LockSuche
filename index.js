@@ -24,16 +24,14 @@ fillTable();
       {
         
         if(!data[i].hasOwnProperty("Titel")){
-            console.log(data[i].Titel);
+            console.log("Loool");
+            console.log(data[i]);
             
         }else {
-
-        console.log(i);
         
 
           var titel = data[i].Titel.toLowerCase();
           var titelTable = data[i].Titel;
-          console.log(titelTable); 
 
   
           if(data[i].Typ == "Lock" && (titelTable.charAt(1) == "." || titelTable.charAt(2) == ".")){
@@ -59,9 +57,15 @@ fillTable();
 
         if(titel.includes(search.toLowerCase()))
         {
+          if(data[i].Trommlergruppe == "Landsknechte"){
+            var link = data[i].Link;
+            toInsert += 
+            '<tr> <th scope="row"><a href="'+link+'">'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
+          }else {
              toInsert += 
-            '<tr> <th scope="row">'+titelTable+'</th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
-        } 
+            '<tr> <th scope="row"><a>'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
+          }
+          } 
       }
     }
   
