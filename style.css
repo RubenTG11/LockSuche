@@ -8,6 +8,35 @@
     padding: 2px 5px 2px 5px;
     border-radius: 10px;
 }
+.link:hover{
+    text-decoration: none;
+    color: black;
+}
+.link {
+	text-decoration: none;
+	color: #18272F;
+	font-weight: 700;
+  position: relative;
+}
+
+.link::before {
+  content: '';
+  background-color: hsla(196, 61%, 58%, .75);
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 100%;
+  height: 8px;
+  z-index: -1;
+  transition: all .3s ease-in-out;
+  text-decoration: none;
+}
+
+.link:hover::before {
+  bottom: 0;
+  height: 100%;
+  text-decoration: none;
+}
 
 .searchWrapper{
     width: 100vw;

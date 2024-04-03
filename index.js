@@ -34,7 +34,7 @@ fillTable();
           var titelTable = data[i].Titel;
 
   
-          if(data[i].Typ == "Lock" && (titelTable.charAt(1) == "." || titelTable.charAt(2) == ".")){
+          if(data[i].Typ == "Locks" && (titelTable.charAt(1) == "." || titelTable.charAt(2) == ".")){
             titelTable = titelTable.substring(3, titel.length)
         }
         
@@ -55,12 +55,12 @@ fillTable();
         }
         
 
-        if(titel.includes(search.toLowerCase()))
+        if(titel.includes(search.toLowerCase()) || data[i].Trommlergruppe.toLowerCase() == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(data[i].Jahrgang.toString().substring(0, search.length))))
         {
           if(data[i].Trommlergruppe == "Landsknechte"){
             var link = data[i].Link;
             toInsert += 
-            '<tr> <th scope="row"><a href="'+link+'">'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
+            '<tr> <th scope="row"><a class="link" href="'+link+'">'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+(data[i].Typ == "Locks" ? "Lock" : data[i].Typ)+'</a> </td> </tr>';
           }else {
              toInsert += 
             '<tr> <th scope="row"><a>'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
@@ -76,4 +76,8 @@ fillTable();
     .catch(function(error) {
       console.error(error); 
     });
+  }
+
+  function isInt(n) {
+    return /^[+-]?\d+$/.test(n);
   }
