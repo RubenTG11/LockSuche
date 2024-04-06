@@ -46,7 +46,7 @@
 }
 
 .svg {
-    width: 100%;
+    width: 100% !important;
     background-color: #18272F;
 }
 

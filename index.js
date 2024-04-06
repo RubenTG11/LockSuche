@@ -2,74 +2,84 @@ let search = document.querySelector('.searchTerm').value;
 
 
 addEventListener("input", (event) => {
-    search = document.querySelector('.searchTerm').value;
+  search = document.querySelector('.searchTerm').value;
 
-    fillTable();    
+  fillTable();
 });
 
 fillTable();
 
 
 
-  function fillTable() {
-    fetch("./data.json")
-    .then(function(response) {
+function fillTable() {
+  fetch("./data.json")
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
-  
+    .then(function (data) {
+
       var toInsert = "";
-  
-      for(var i = 0; i < data.length; i++)
-      {
-        
-        if(!data[i].hasOwnProperty("Titel") || data[i].Titel == ""){
-        }else {
-        
+
+      for (var i = 0; i < data.length; i++) {
+
+        if (!data[i].hasOwnProperty("Titel") || data[i].Titel == "") {
+        } else {
+
 
           var titel = data[i].Titel.toLowerCase();
           var titelTable = data[i].Titel;
 
-  
-          if(data[i].Typ == "Locks" && (titelTable.charAt(1) == "." || titelTable.charAt(2) == ".")){
+
+          if (data[i].Typ == "Locks" && (titelTable.charAt(1) == "." || titelTable.charAt(2) == ".")) {
             titelTable = titelTable.substring(3, titel.length)
-        }
-        
-        var typeColor = 'rgba(255, 255, 4, 0.5)';
-
-        if(data[i].Typ != "Lock"){
-          typeColor = 'rgba(255, 119, 0, 0.5)';
-        }
-
-        var groupColor;
-
-        if(data[i].Trommlergruppe == "Landsknechte"){
-          groupColor = 'rgba(0, 0, 241, 0.5)';
-        }else if(data[i].Trommlergruppe == "Turmfalken"){
-          groupColor = 'rgba(186, 49, 179, 0.5)';
-        }else{
-          groupColor = 'rgba(71, 26, 26, 0.5)';
-        }
-        
-
-        if(titel.includes(search.toLowerCase()) || data[i].Trommlergruppe.toLowerCase() == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(data[i].Jahrgang.toString().substring(0, search.length))))
-        {
-          if(data[i].Trommlergruppe == "Landsknechte"){
-            var link = data[i].Link;
-            toInsert += 
-            '<tr> <th scope="row"><a class="link" href="'+link+'">'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+(data[i].Typ == "Locks" ? "Lock" : data[i].Typ)+'</a> </td> </tr>';
-          }else {
-             toInsert += 
-            '<tr> <th scope="row"><a>'+titelTable+'</a></th> <td><a id="year">'+data[i].Jahrgang+'</a> <a id="Trommlergruppe" style="background-color: '+groupColor+';">'+data[i].Trommlergruppe+'</a> <a id="type" style="background-color: '+typeColor+';">'+data[i].Typ+'</a> </td> </tr>';
           }
-          } 
+
+          var typeColor = 'rgba(255, 255, 4, 0.5)';
+
+          if (data[i].Typ != "Lock") {
+            typeColor = 'rgba(255, 119, 0, 0.5)';
+          }
+
+          var groupColor;
+
+          if (data[i].Trommlergruppe == "Landsknechte") {
+            groupColor = 'rgba(0, 0, 241, 0.5)';
+          } else if (data[i].Trommlergruppe == "Turmfalken") {
+            groupColor = 'rgba(186, 49, 179, 0.5)';
+          } else {
+            groupColor = 'rgba(71, 26, 26, 0.5)';
+          }
+
+
+          if (titel.includes(search.toLowerCase()) || data[i].Trommlergruppe.toLowerCase() == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(data[i].Jahrgang.toString().substring(0, search.length)))) {
+            if (data[i].Trommlergruppe == "Landsknechte") {
+              var link = data[i].Link;
+              toInsert +=
+                '<tr> <th scope="row"><a class="link" href="' + link + '">' + titelTable + '</a></th> <td><a id="year">' + data[i].Jahrgang + '</a> <a id="Trommlergruppe" style="background-color: ' + groupColor + ';">' + data[i].Trommlergruppe + '</a> <a id="type" style="background-color: ' + typeColor + ';">' + (data[i].Typ == "Locks" ? "Lock" : data[i].Typ) + '</a> </td> </tr>';
+            } else {
+              toInsert +=
+                '<tr> <th scope="row"><a>' + titelTable + '</a></th> <td><a id="year">' + data[i].Jahrgang + '</a> <a id="Trommlergruppe" style="background-color: ' + groupColor + ';">' + data[i].Trommlergruppe + '</a> <a id="type" style="background-color: ' + typeColor + ';">' + data[i].Typ + '</a> </td> </tr>';
+            }
+          }
+        }
       }
-    }
 
-    document.getElementById('tableInsert').innerHTML = toInsert;
+      if (document.getElementById('tableInsert') == null && toInsert.length != 0) {
+        document.getElementById('table').innerHTML = `<thead class="thead-dark">
+                                                          <tr>
+                                                            <th scope="col">Titel</th>
+                                                            <th scope="col">Info</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody id="tableInsert">
+                                                          
+                                                        </tbody>`;
+      }
 
-    if(toInsert.length == 0){
-      document.getElementById('table').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  class="svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="470" height="290" viewBox="0 0 470 290"> <defs> <path class="fundo" id="prefix__a" d="M5.063 128.67c-2.513 15.192 5.633 31.093 17.898 38.941 5.99 3.832 13.34 6.528 16.471 13.254 4.868 10.452-3.879 22.437-13.113 28.515-9.236 6.078-20.5 10.9-24.704 21.683-2.771 7.108-1.685 15.387 1.058 22.507 10.06 26.112 39.393 37.547 65.479 36.15 26.086-1.396 50.827-12.407 76.416-18.075 87.873-19.465 180.005 24.717 267.728 4.47 13.65-3.151 27.4-8.081 37.943-17.99 11.883-11.167 18.632-28.016 19.65-45.023.97-16.225-4.34-34.495-17.744-41.806-7.834-4.273-17.196-4.1-25.7-1.774-5.43 1.483-10.767 3.808-16.369 3.848-5.601.038-11.763-3-13.386-8.808-1.707-6.107 2.182-12.41 6.642-16.577 9.072-8.474 21.203-12.707 29.441-22.126 7.927-9.063 11.264-22.574 8.574-34.716-2.692-12.141-11.326-22.538-22.188-26.715-27.683-10.645-57.844 18.377-86.152 9.873-2.101-.63-4.312-1.605-5.418-3.641-1.08-1.988-.834-4.51-.214-6.716 3.468-12.348 16.939-20.21 17.528-33.102.32-7.008-3.504-13.564-8.325-18.251-33.126-32.2-81.125 6.102-114.9 18.194-55.542 19.884-112.157 36.49-167.849 55.963-20.81 7.275-44.91 18.606-48.766 41.922z"/>
+      document.getElementById('tableInsert').innerHTML = toInsert;
+
+      if (toInsert.length == 0 && document.getElementById('tableInsert') != null) {
+        document.getElementById('table').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"  class="svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="470" height="290" viewBox="0 0 470 290"> <defs> <path class="fundo" id="prefix__a" d="M5.063 128.67c-2.513 15.192 5.633 31.093 17.898 38.941 5.99 3.832 13.34 6.528 16.471 13.254 4.868 10.452-3.879 22.437-13.113 28.515-9.236 6.078-20.5 10.9-24.704 21.683-2.771 7.108-1.685 15.387 1.058 22.507 10.06 26.112 39.393 37.547 65.479 36.15 26.086-1.396 50.827-12.407 76.416-18.075 87.873-19.465 180.005 24.717 267.728 4.47 13.65-3.151 27.4-8.081 37.943-17.99 11.883-11.167 18.632-28.016 19.65-45.023.97-16.225-4.34-34.495-17.744-41.806-7.834-4.273-17.196-4.1-25.7-1.774-5.43 1.483-10.767 3.808-16.369 3.848-5.601.038-11.763-3-13.386-8.808-1.707-6.107 2.182-12.41 6.642-16.577 9.072-8.474 21.203-12.707 29.441-22.126 7.927-9.063 11.264-22.574 8.574-34.716-2.692-12.141-11.326-22.538-22.188-26.715-27.683-10.645-57.844 18.377-86.152 9.873-2.101-.63-4.312-1.605-5.418-3.641-1.08-1.988-.834-4.51-.214-6.716 3.468-12.348 16.939-20.21 17.528-33.102.32-7.008-3.504-13.564-8.325-18.251-33.126-32.2-81.125 6.102-114.9 18.194-55.542 19.884-112.157 36.49-167.849 55.963-20.81 7.275-44.91 18.606-48.766 41.922z"/>
       </defs>
       <g fill="none" fill-rule="evenodd">
           <path fill="#FFF" d="M0 0H1366V800H0z" transform="translate(-448 -157)"/>
@@ -109,18 +119,18 @@ fillTable();
           </g>
       </g>
   </svg>`
-    }
-  
-    
-      
-    
-    
-    })
-    .catch(function(error) {
-      console.error(error); 
-    });
-  }
+      }
 
-  function isInt(n) {
-    return /^[+-]?\d+$/.test(n);
-  }
+
+
+
+
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+function isInt(n) {
+  return /^[+-]?\d+$/.test(n);
+}
