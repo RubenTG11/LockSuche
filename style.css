@@ -1,5 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
+@font-face { font-family: OldEnglish; src: url('./oldenglishtextmt.ttf'); } 
+
 #year {
     background-color: rgb(122, 121, 121, 0.5);
 }
@@ -8,6 +10,17 @@
     padding: 2px 5px 2px 5px;
     border-radius: 10px;
 }
+
+#table{
+  display: none;
+  overflow: hidden;
+}
+
+h1{
+  font-family: OldEnglish, Arial, Helvetica, sans-serif !important;
+}
+
+
 .link:hover{
     text-decoration: none;
     color: black;
@@ -50,92 +63,173 @@
     background-color: #18272F;
 }
 
-/*======================
-    404 page
-=======================*/
+.container{
+  display: flex !important;
+  flex-direction: row;
+}
 
-    .fundo{
-        animation: scales 3s alternate  infinite;
-        transform-origin: center;
-      }
-      .pao-baixo{
-         animation: rotatepao 14s cubic-bezier(.1,.49,.41,.97)  infinite;
-        transform-origin: center;
-      }
-      .pao-cima{
-         animation: rotatepao 7s 1s cubic-bezier(.1,.49,.41,.97)  infinite;
-        transform-origin: center;
-      }
-      .olhos{animation: olhos   2s  alternate  infinite;
-         transform-origin: center;
-      }
-      
-      .left-sparks{animation: left-sparks   4s  alternate  infinite;
-            transform-origin: 150px 156px;
-      }
-      
-      .right-sparks{animation: left-sparks   4s  alternate  infinite;
-            transform-origin: 310px 150px;
-      }
-      
-      .olhos{animation: olhos   2s  alternate  infinite;
-         transform-origin: center;
-      }
-      @keyframes scales{
-        from { transform: scale(0.98)}
-        to{ transform: scale(1)}
-      }
-      
-      @keyframes rotatepao{
-        0% { transform:  rotate(0deg)}
-        50% , 60%{ transform:  rotate(-20deg)}
-        100%{  transform:  rotate(0deg) }
-       
-      }
-      
-      @keyframes olhos{
-        0%{
-          transform: rotateX(0deg);
-        }
-         100%{
-          transform: rotateX(30deg);
-        }
-      }
-      
-      @keyframes left-sparks{
-        0%{
-          opacity: 0; 
-        }
-        
-      }
-      
-      
-      .main{
-        
-        min-height: 600px;
-        margin: 0px auto;
-        width: auto;
-        max-width: 460px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      .path {
-        stroke-dasharray: 300;
-        stroke-dashoffset: 300;
-        animation: dash 4s   alternate infinite;
-      }
-      
-      @keyframes dash{
-         0%, 30%{
-           fill: 4B4B62;
-          stroke-dashoffset:   0;
-        }
-         80%,100%{
-           fill: transparent;
-          stroke-dashoffset:  -200;
-        }
-         
-        
-      }
+.newArea{
+  width: 100%;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+
+
+/*new Cards*/
+
+.loading{
+  background-color: #000;
+}
+
+.card{
+  width: 90%;
+  max-width: 314px;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  position: relative;
+  
+  margin: 50px 10px 10px 10px;
+}
+
+.cardcontent{
+  width: auto;
+  height: auto;
+  width: 100%;
+  border: 2px solid #f8f8f8;
+  border-radius: 5px;
+  display: flex;
+  text-align: start;
+  flex-direction: column;
+}
+
+.avatar{
+  height: 55px;
+  width: 55px;
+  background-color: #000;
+  border-radius: 60px;
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.avatarimg{
+  width: 100%;
+  height: 100%;
+  border-radius: 660px;
+}
+
+.title{
+  margin-top: 30px;
+  padding-bottom: 7px;
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 19px;
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: normal;
+  height: auto;
+  display: flex;
+}
+
+.title p{
+  word-wrap: break- !important;
+}
+
+.piper, .drums, .audio{
+  margin-left: 15px;
+  margin-right: 15px;
+  background-color: #f8f8f8;
+  font-size: 1em;
+  font-family: "Open Sans";
+  color: #444444;
+  text-align: start;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.drumstext, .pipertext{
+  overflow: hidden;
+  display: none;
+}
+
+.pipertitle, .drumstitle, .audioTitle{
+  font-weight: bold;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-top: 10px;
+}
+
+.pipertext, .drumstext{
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.collapsible, .collapsible2, .collapsible3{
+  border: none;
+  background-color: transparent;
+  all: unset;
+}
+
+.collapsible:hover, .collapsible2:hover, .collapsible3:hover{
+  cursor: pointer;
+  text-decoration: solid underline #635994 2px;
+}
+
+.collapsible:focus, .collapsible2:focus, .collapsible3:focus{
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.audioelement{
+  max-width: 100%;
+  overflow: hidden;
+  display: none;
+}
+
+.titletext{
+  padding: 0;
+  margin: 0;
+  
+
+  padding: 0 .25rem;
+margin: 0 -.25rem;
+  margin-right: 10px !important;
+  box-shadow: inset 0 0 0 0 #635994;
+  transition: color .3s ease-in-out, background-color .3s ease-in-out;
+color: black;
+  
+  
+
+}
+
+.titletext:hover {
+  text-decoration: none;
+  color: white;
+
+  background-color: #635994;
+}
+
+
+.jahrgang, .group, .type{
+  margin-right: 5px;
+  font-family: "Open Sans";
+  color: #444444;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 10px;
+  background-color: gray;
+}
