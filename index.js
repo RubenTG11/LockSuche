@@ -11,7 +11,7 @@ fillTable();
 
 
 
-function fillTable() {
+async function fillTable() {
 
   document.getElementById("container").classList.toggle("loading");
   fetch("./data.json")
