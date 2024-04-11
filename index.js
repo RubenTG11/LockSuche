@@ -61,13 +61,23 @@ async function fillTable() {
             var year = data[i].Jahrgang;
             var group = data[i].Trommlergruppe;
             var type = (data[i].Typ == "Locks" ? "Lock" : data[i].Typ);
-            var logoLink = (data[i].imgLink == null || data[i].imgLink == "") ? null : data[i].imgLink;
+            var logoLink = "";
             var piper = (data[i].Pferferstimme == null || data[i].Pferferstimme == "")  ? null : data[i].Pferferstimme;
             var drums = (data[i].Trommlerstimme == null || data[i].Trommlerstimme == "") ? null : data[i].Trommlerstimme;
             var audioLink = (data[i].audioLink == null || data[i].audioLink == "") ? null : data[i].audioLink
             var link = (data[i].Link == null || data[i].Link == "") ? "https://rubentg11.github.io/LockSuche" : data[i].Link;
+
+            if(data[i].imgLink == ""){
+              logoLink = "./img/Logo_dummy.png";
+            }else if(group == "FSG"){
+              logoLink = "./img/Logo_FSG.png";
+            }else if(group == "Turmfalken"){
+              logoLink = "./img/Logo_Tufas.png";
+            }else{
+              logoLink = "./img/Logo_"+year+".png";
+            }
            
-            toInsert2 += lockCard(finalTitel, year, group, type, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", logoLink, piper, drums, audioLink, link);
+            toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link);
           }
 
 
@@ -165,12 +175,11 @@ function isInt(n) {
   return /^[+-]?\d+$/.test(n);
 }
 
-function lockCard(title, year, group, type, typecolor, groupcolor, yearcolor, logoLink, piper, drums, audioLink, link){
+function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link){
   var lockCard = "";
+  
+  console.log(logoLink)
 
-  if(logoLink == null){
-    logoLink = "https://landsknechte.org/wp-content/uploads/2021/03/LKV_LOGO_test_black.png";
-  }
 
   lockCard += `<div class="card">
         <div class="avatar">
