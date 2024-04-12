@@ -10,11 +10,15 @@
     <title>Locksuche</title>
   </head>
   <body>
+
+    
     
     <h1 class="text-center pt-4">Locksuche</h1>
 
-    <div class="searchWrapper">
-        <div class="search">
+    <img class="loadingImg" src="./img/Loading.jpg" loading="lazy"></img>
+<div class="wrapper card-hide" id="wrapper">
+    <div class="searchWrapper" id="searchWrapper2">
+        <div class="search" id="search">
             <input type="text" class="searchTerm" placeholder="Suche">
         </div>
     </div>
@@ -26,6 +30,7 @@
 
 
   <div id="newArea" class="newArea"></div>
+</div>
 </div>
 
 
@@ -40,17 +45,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
-
-    <script src="withinViewport.js"></script>
-<script src="jquery.withinviewport.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@sitelintcode/improved-attribute-lazy-loading@0.0.1/dist/improved-attribute-lazy-loading.js"></script>
-    <script>
-    (function() {
-      const improvedAttributeLazyLoading = new window.sitelint.ImprovedAttributeLazyLoading();
-      improvedAttributeLazyLoading.install();
-    }())
-    </script>
 
   
     <script src="./index.js"></script>

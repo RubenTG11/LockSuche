@@ -1,19 +1,54 @@
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+document.querySelector('.searchTerm').value = "";
 let search = document.querySelector('.searchTerm').value;
 
 
 addEventListener("input", (event) => {
   search = document.querySelector('.searchTerm').value;
 
-  fillTable();
+  updateTable();
 });
+
+
 
 fillTable();
 
+async function updateTable() {
+  var elements = document.getElementsByClassName("card");
+
+  for (let index = 0; index < elements.length; index++) {
+    const element = elements[index];
+    var parent = element.children[1].children[0].children[0];
+
+    var title = parent.children[0].textContent.toLowerCase();
+    var year = parent.children[1].textContent;
+    var group = parent.children[2].textContent.toLowerCase();
+
+    if (title.includes(search.toLowerCase()) || group == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(year.substring(0, search.length)))) {
+      if(element.classList.contains("card-hide")){
+        element.classList.remove("card-hide");
+        
+      }
+    } else {
+      if(!element.classList.contains("card-hide")) {
+        element.classList.toggle("card-hide");
+        console.log(title);
+      }
+    }
+    
+
+  }
+
+}
 
 
- function fillTable() {
 
-  document.getElementById("container").classList.toggle("loading");
+
+
+ async function fillTable() {
+  
+ 
   fetch("./data.json")
     .then(function (response) {
       return response.json();
@@ -68,13 +103,13 @@ fillTable();
             var link = (data[i].Link == null || data[i].Link == "") ? "https://rubentg11.github.io/LockSuche" : data[i].Link;
 
             if(data[i].imgLink == ""){
-              logoLink = "./img/Logo_dummy.png";
+              logoLink = "./img/Logo_dummy.jpg";
             }else if(group == "FSG"){
-              logoLink = "./img/Logo_FSG.png";
+              logoLink = "./img/Logo_FSG.jpg";
             }else if(group == "Turmfalken"){
-              logoLink = "./img/Logo_Tufas.png";
+              logoLink = "./img/Logo_Tufas.jpg";
             }else{
-              logoLink = "./img/Logo_"+year+".png";
+              logoLink = "./img/Logo_"+year+".jpg";
             }
            
             toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link);
@@ -164,8 +199,9 @@ for (let i = 0; i < coll.length; i++) {
       console.error(error);
     });
 
-    document.getElementById("container").classList.remove("loading");
-
+    await delay(2000);
+    document.querySelector('.loadingImg').classList.toggle("card-hide");
+    document.querySelector('.wrapper').classList.remove("card-hide");
     
   
 
@@ -177,8 +213,6 @@ function isInt(n) {
 
 function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link){
   var lockCard = "";
-  
-  console.log(logoLink)
 
 
   lockCard += `<div class="card">
