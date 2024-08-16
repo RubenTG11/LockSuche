@@ -61,3 +61,19 @@ for (let i = 0; i < coll.length; i++) {
       });
   }
 
+  var coll4 = document.getElementsByClassName("tu");
+
+  console.log(coll4)
+
+  for (let i = 0; i < coll4.length; i++) {
+    const element = coll4[i];
+    
+    console.log("hi");
+    element.addEventListener("click", function() {
+        this.classList.toggle("thumbs-up-button-liked");
+
+        var title = element.getAttribute('button-title');
+        
+      });
+  }
+

@@ -2,7 +2,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 document.querySelector('.searchTerm').value = "";
 let search = document.querySelector('.searchTerm').value;
-
+let filter = "all";
 
 addEventListener("input", (event) => {
   search = document.querySelector('.searchTerm').value;
@@ -25,6 +25,7 @@ async function updateTable() {
     var year = parent.children[1].textContent;
     var group = parent.children[2].textContent.toLowerCase();
 
+    if(filter == "all") {
     if (title.includes(search.toLowerCase()) || group == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(year.substring(0, search.length)))) {
       if (element.classList.contains("card-hide")) {
         element.classList.remove("card-hide");
@@ -33,9 +34,28 @@ async function updateTable() {
     } else {
       if (!element.classList.contains("card-hide")) {
         element.classList.toggle("card-hide");
-        console.log(title);
       }
     }
+  } else {
+    var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+    var searchClass = search.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
+
+    var likedString = likedList.toString().toLowerCase();
+    var includes = likedList.some((x) => {return x.toLowerCase()===element.getAttribute("card-data").toLowerCase();});
+
+    if (likedString.includes(searchClass.toLowerCase()) && includes && (title.includes(search.toLowerCase()) || group == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(year.substring(0, search.length))))) {
+      if (element.classList.contains("card-hide")) {
+        element.classList.remove("card-hide");
+
+      }
+    } else {
+      if (!element.classList.contains("card-hide")) {
+        element.classList.toggle("card-hide");
+      }
+    }
+  
+
+  }
 
 
   }
@@ -112,7 +132,11 @@ async function fillTable() {
               logoLink = "./img/Logo_" + year + ".jpg";
             }
 
-            toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link);
+            var openclass = finalTitel.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
+            var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+            var liked = likedList.includes(openclass);
+
+            toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link, liked);
           }
 
 
@@ -131,7 +155,7 @@ async function fillTable() {
 
         var element = e.target;
 
-        if (element.nodeName == "BUTTON" || element.id.includes("plus")) {
+        if (element.getAttribute('to-open') != null || element.id.includes("plus")) {
 
 
           var content = document.getElementById(element.getAttribute('to-open'));
@@ -147,9 +171,73 @@ async function fillTable() {
             button.innerHTML = "&#10134";
           }
         }
+        if (element.getAttribute('button-title') != null || element.parentElement.getAttribute("button-title") != null) {
+          element = element.parentElement.getAttribute("button-title") != null ? element.parentElement : element;
+          var cardContent = document.getElementById(element.getAttribute('button-title'));
+          var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+          if(likedList.includes(element.getAttribute('button-title').replaceAll("card-", ""))){
+            likedList = likedList.filter((liked) => liked !== element.getAttribute('button-title').replaceAll("card-", ""));
+            element.firstChild.setAttribute("fill", "rgba(114, 113, 113, 1)");
+          }else{
+            likedList.push(element.getAttribute('button-title').replaceAll("card-", ""));
+            element.firstChild.setAttribute("fill", "rgba(255, 215, 0, 1)");
+
+          }
+          setCookie("likedLocks", JSON.stringify(likedList), 100);
+          updateTable();
+          cardContent.classList.toggle("cardcontent-liked");
+          element.classList.toggle("thumbs-up-button-liked");
+        }
       });
 
+      document.querySelector(".filter-all").addEventListener("click", (e) => {
+        var element = e.target;
+        if(!element.classList.contains("filter-active")){
+          element.classList.toggle("filter-active");
+            document.getElementById("filter-favourites").classList.remove("filter-active")
+          
+        }
 
+        filter="all";
+        search="";
+        document.querySelector('.searchTerm').value ="";
+        updateTable();
+      });
+      document.querySelector(".filter-favourites").addEventListener("click", (e) => {
+        var element = e.target;
+          element.classList.toggle("filter-active");
+          document.getElementById("filter-all").classList.toggle("filter-active")
+        
+          filter=element.classList.contains("filter-active") ? "fav" : "all";
+          search="";
+          document.querySelector('.searchTerm').value ="";
+        updateTable();
+      });
+
+      document.querySelector(".newArea").addEventListener("mouseover", (e) => {
+        var element = e.target;
+        if(element.classList.contains("path")){
+          if(element.parentElement.classList.contains("thumbs-up-button-liked")){
+            element.setAttribute("fill", "rgba(114, 113, 113, .6)");
+          }else{
+            element.setAttribute("fill", "rgba(255, 215, 0, .6)");
+
+          }
+        }
+      });
+
+      document.querySelector(".newArea").addEventListener("mouseout", (e) => {
+        var element = e.target;
+        if(element.classList.contains("path")){
+          if(element.parentElement.classList.contains("thumbs-up-button-liked")){
+            element.setAttribute("fill", "rgba(255, 215, 0, 1)");
+
+          }else{
+            element.setAttribute("fill", "rgba(114, 113, 113, 1)");
+
+          }
+        }
+      });
 
 
 
@@ -166,6 +254,7 @@ async function fillTable() {
   await delay(2000);
   document.querySelector('.loadingImg').classList.toggle("card-hide");
   document.querySelector('.wrapper').classList.remove("card-hide");
+  updateTable();
 
 
 
@@ -175,17 +264,20 @@ function isInt(n) {
   return /^[+-]?\d+$/.test(n);
 }
 
-function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link) {
+function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link, liked) {
   var lockCard = "";
 
   link = (link == null || link == "") ? "rubentg11.github.io/LockSuche" : link;
 
 
-  lockCard += `<div class="card">
+  var buttonclass = liked ? "thumbs-up-button-liked" : "thumbs-up-button";
+  var openclass = title.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
+
+  lockCard += `<div class="card" card-data="`+openclass+`">
         <div class="avatar">
         <img class="avatarimg" src="`+ logoLink + `" loading="lazy" alt="oh no">
         </div>
-        <div class="cardcontent" id="cardcontent">
+        <div class="cardcontent `+ (liked ? "cardcontent-liked" : "") +`" id="card-`+ openclass + `">
             <div class="title">
                 <p>
                         <a class="titletext" href="`+ link + `">` + title + `</a> 
@@ -195,7 +287,6 @@ function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yea
                 </p>
             </div>`
 
-  var openclass = title.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
 
   if (drums != null) {
 
@@ -228,7 +319,38 @@ function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yea
                 <audio id="audio-`+ openclass + `" class="audioelement" controls="controls" preload="none" data-preload="metadata"><source src="` + audioLink + `" type="audio/mpeg"><span style="color: red;">Dein Browser unterstützt das Audio-Element leider nicht.</span></audio>
             </div>`
   }
+
+  lockCard += `<div class="button-wrapper ` + buttonclass + `">`+getSVG(buttonclass, openclass, liked)+`</div>`
+
   lockCard += `</div> </div>`
 
   return lockCard;
-} 
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function getSVG(buttonclass, openclass, liked){
+  var backgroundColor = liked ? "gold" : "rgba(114, 113, 113, 1)";
+  return `<?xml version="1.0" ?><svg class="tu ` + buttonclass + `" id="thumbs-up-button" button-title="card-` + openclass + `" height="45" viewBox="0 0 1792 1792" width="30" xmlns="http://www.w3.org/2000/svg"><path class="path" fill="`+backgroundColor+`" d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5t45.5 18.5q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19h-288q-26 0-45-19t-19-45v-640q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29-120.5-39.5q-123-43-158-44-26-1-45-19.5t-19-44.5v-641q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5 13.5-60.5q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/></svg>`;
+}

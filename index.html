@@ -5,21 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="./style.min.css" />
+    <link rel="stylesheet" href="./style.css" />
     
     <title>Locksuche</title>
   </head>
   <body>
 
     
-    
     <h1 class="text-center pt-4">Locksuche</h1>
+
 
     <img class="loadingImg" src="./img/Loading.jpg"></img>
 <div class="wrapper card-hide" id="wrapper">
     <div class="searchWrapper" id="searchWrapper2">
         <div class="search" id="search">
             <input type="text" class="searchTerm" placeholder="Suche">
+        </div>
+
+        <div class="filterContainer">
+          <button id="filter-all" class="filter filter-active filter-all">Alle</button>
+          <button id="filter-favourites" class="filter filter-favourites">Gefällt mir</button>
         </div>
     </div>
 
@@ -43,8 +48,6 @@
   
     <script src="./index.js"></script>
 
-    
-    
 
 
 </body>
