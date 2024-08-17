@@ -37,13 +37,11 @@ async function updateTable() {
       }
     }
   } else {
-    var likedList = getCookie("likedLocks") == "" ? [] : getCookie("likedLocks").split(",");
-    var searchClass = search.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
+    var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
 
-    var likedString = likedList.toString().toLowerCase();
-    var includes = likedList.some((x) => {return x.toLowerCase()===element.getAttribute("card-data").toLowerCase();});
+    var includes = likedList.some((x) => {return x.toString()===element.getAttribute("card-id").toString();});
 
-    if (likedString.includes(searchClass.toLowerCase()) && includes && (title.includes(search.toLowerCase()) || group == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(year.substring(0, search.length))))) {
+    if (includes && (title.includes(search.toLowerCase()) || group == search.toLowerCase() || (isInt(search) && parseInt(search) == parseInt(year.substring(0, search.length))))) {
       if (element.classList.contains("card-hide")) {
         element.classList.remove("card-hide");
 
@@ -61,6 +59,8 @@ async function updateTable() {
   }
 
 }
+
+
 
 
 
@@ -121,6 +121,7 @@ async function fillTable() {
             var drums = (data[i].Trommlerstimme == null || data[i].Trommlerstimme == "") ? null : data[i].Trommlerstimme;
             var audioLink = (data[i].audioLink == null || data[i].audioLink == "") ? null : data[i].audioLink
             var link = (data[i].Link == null || data[i].Link == "") ? "https://rubentg11.github.io/LockSuche" : data[i].Link;
+            var id = data[i].id;
 
             if (data[i].imgLink == "") {
               logoLink = "./img/Logo_dummy.jpg";
@@ -132,11 +133,10 @@ async function fillTable() {
               logoLink = "./img/Logo_" + year + ".jpg";
             }
 
-            var openclass = finalTitel.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
             var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
-            var liked = likedList.includes(openclass);
+            var liked = likedList.includes(id.toString());
 
-            toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link, liked);
+            toInsert2 += lockCard(finalTitel, year, group, type, logoLink, typeColor, groupColor, "rgb(122, 121, 121, 0.5)", piper, drums, audioLink, link, liked, id);
           }
 
 
@@ -174,21 +174,21 @@ async function fillTable() {
         if (element.getAttribute('button-title') != null || element.parentElement.getAttribute("button-title") != null) {
           element = element.parentElement.getAttribute("button-title") != null ? element.parentElement : element;
           var cardContent = document.getElementById(element.getAttribute('button-title'));
-          var likedList = getCookie("likedLocks") == "" ? [] : getCookie("likedLocks").split(",");
+
+          var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+
           if(likedList.includes(element.getAttribute('button-title').replaceAll("card-", ""))){
-            likedList = likedList.filter((liked) => liked !== element.getAttribute('button-title').replaceAll("card-", ""));
+            likedList = likedList.filter((liked) => liked > element.getAttribute('button-title').replaceAll("card-", "") || liked < element.getAttribute('button-title').replaceAll("card-", ""));
             element.firstChild.setAttribute("fill", "rgba(114, 113, 113, 1)");
           }else{
             likedList.push(element.getAttribute('button-title').replaceAll("card-", ""));
             element.firstChild.setAttribute("fill", "rgba(255, 215, 0, 1)");
 
           }
-          console.log(likedList.toString());
-          setCookie("likedLocks", likedList.toString(), 100);
+          setCookie("likedLocks", JSON.stringify(likedList), 10);
+          updateTable();
           cardContent.classList.toggle("cardcontent-liked");
           element.classList.toggle("thumbs-up-button-liked");
-          
-          console.log(new Date());
         }
       });
 
@@ -266,7 +266,7 @@ function isInt(n) {
   return /^[+-]?\d+$/.test(n);
 }
 
-function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link, liked) {
+function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yearcolor, piper, drums, audioLink, link, liked, id) {
   var lockCard = "";
 
   link = (link == null || link == "") ? "rubentg11.github.io/LockSuche" : link;
@@ -275,11 +275,11 @@ function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yea
   var buttonclass = liked ? "thumbs-up-button-liked" : "thumbs-up-button";
   var openclass = title.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
 
-  lockCard += `<div class="card" card-data="`+openclass+`">
+  lockCard += `<div class="card" card-id="`+id+`" "card-data="`+openclass+`">
         <div class="avatar">
         <img class="avatarimg" src="`+ logoLink + `" loading="lazy" alt="oh no">
         </div>
-        <div class="cardcontent `+ (liked ? "cardcontent-liked" : "") +`" id="card-`+ openclass + `">
+        <div class="cardcontent `+ (liked ? "cardcontent-liked" : "") +`" id="card-`+ id + `">
             <div class="title">
                 <p>
                         <a class="titletext" href="`+ link + `">` + title + `</a> 
@@ -322,7 +322,7 @@ function lockCard(title, year, group, type, logoLink, typecolor, groupcolor, yea
             </div>`
   }
 
-  lockCard += `<div class="button-wrapper ` + buttonclass + `">`+getSVG(buttonclass, openclass, liked)+`</div>`
+  lockCard += `<div class="button-wrapper ` + buttonclass + `">`+getSVG(buttonclass, id, liked)+`</div>`
 
   lockCard += `</div> </div>`
 
@@ -352,7 +352,7 @@ function getCookie(cname) {
   return "";
 }
 
-function getSVG(buttonclass, openclass, liked){
+function getSVG(buttonclass, id, liked){
   var backgroundColor = liked ? "gold" : "rgba(114, 113, 113, 1)";
-  return `<?xml version="1.0" ?><svg class="tu ` + buttonclass + `" id="thumbs-up-button" button-title="card-` + openclass + `" height="45" viewBox="0 0 1792 1792" width="30" xmlns="http://www.w3.org/2000/svg"><path class="path" fill="`+backgroundColor+`" d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5t45.5 18.5q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19h-288q-26 0-45-19t-19-45v-640q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29-120.5-39.5q-123-43-158-44-26-1-45-19.5t-19-44.5v-641q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5 13.5-60.5q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/></svg>`;
+  return `<?xml version="1.0" ?><svg class="tu ` + buttonclass + `" id="thumbs-up-button" button-title="card-` + id + `" height="45" viewBox="0 0 1792 1792" width="30" xmlns="http://www.w3.org/2000/svg"><path class="path" fill="`+backgroundColor+`" d="M320 1344q0-26-19-45t-45-19q-27 0-45.5 19t-18.5 45q0 27 18.5 45.5t45.5 18.5q26 0 45-18.5t19-45.5zm160-512v640q0 26-19 45t-45 19h-288q-26 0-45-19t-19-45v-640q0-26 19-45t45-19h288q26 0 45 19t19 45zm1184 0q0 86-55 149 15 44 15 76 3 76-43 137 17 56 0 117-15 57-54 94 9 112-49 181-64 76-197 78h-129q-66 0-144-15.5t-121.5-29-120.5-39.5q-123-43-158-44-26-1-45-19.5t-19-44.5v-641q0-25 18-43.5t43-20.5q24-2 76-59t101-121q68-87 101-120 18-18 31-48t17.5-48.5 13.5-60.5q7-39 12.5-61t19.5-52 34-50q19-19 45-19 46 0 82.5 10.5t60 26 40 40.5 24 45 12 50 5 45 .5 39q0 38-9.5 76t-19 60-27.5 56q-3 6-10 18t-11 22-8 24h277q78 0 135 57t57 135z"/></svg>`;
 }
