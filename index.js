@@ -187,7 +187,7 @@ async function fillTable() {
           setCookie("likedLocks", likedList.toString(), 100);
           cardContent.classList.toggle("cardcontent-liked");
           element.classList.toggle("thumbs-up-button-liked");
-          updateTable();
+          
           console.log(new Date());
         }
       });
