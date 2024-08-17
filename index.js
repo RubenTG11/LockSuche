@@ -184,9 +184,10 @@ async function fillTable() {
 
           }
           setCookie("likedLocks", JSON.stringify(likedList), 100);
-          updateTable();
           cardContent.classList.toggle("cardcontent-liked");
           element.classList.toggle("thumbs-up-button-liked");
+          updateTable();
+          console.log(new Date().now());
         }
       });
 
