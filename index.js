@@ -37,7 +37,7 @@ async function updateTable() {
       }
     }
   } else {
-    var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+    var likedList = getCookie("likedLocks") == "" ? [] : getCookie("likedLocks").split(",");
     var searchClass = search.replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("–", "");
 
     var likedString = likedList.toString().toLowerCase();
@@ -174,7 +174,7 @@ async function fillTable() {
         if (element.getAttribute('button-title') != null || element.parentElement.getAttribute("button-title") != null) {
           element = element.parentElement.getAttribute("button-title") != null ? element.parentElement : element;
           var cardContent = document.getElementById(element.getAttribute('button-title'));
-          var likedList = getCookie("likedLocks") == "" ? [] : JSON.parse(getCookie("likedLocks"));
+          var likedList = getCookie("likedLocks") == "" ? [] : getCookie("likedLocks").split(",");
           if(likedList.includes(element.getAttribute('button-title').replaceAll("card-", ""))){
             likedList = likedList.filter((liked) => liked !== element.getAttribute('button-title').replaceAll("card-", ""));
             element.firstChild.setAttribute("fill", "rgba(114, 113, 113, 1)");
@@ -183,11 +183,11 @@ async function fillTable() {
             element.firstChild.setAttribute("fill", "rgba(255, 215, 0, 1)");
 
           }
-          setCookie("likedLocks", JSON.stringify(likedList), 100);
+          setCookie("likedLocks", likedList.toString(), 100);
           cardContent.classList.toggle("cardcontent-liked");
           element.classList.toggle("thumbs-up-button-liked");
           updateTable();
-          console.log(new Date().now());
+          console.log(new Date());
         }
       });
 
