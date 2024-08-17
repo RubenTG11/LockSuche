@@ -183,6 +183,7 @@ async function fillTable() {
             element.firstChild.setAttribute("fill", "rgba(255, 215, 0, 1)");
 
           }
+          console.log(likedList.toString());
           setCookie("likedLocks", likedList.toString(), 100);
           cardContent.classList.toggle("cardcontent-liked");
           element.classList.toggle("thumbs-up-button-liked");
