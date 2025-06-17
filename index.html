@@ -598,7 +598,7 @@
             <!-- Tabs -->
             <div class="flex mb-4">
                 <button id="allLocksTab" class="py-2 px-4 font-medium text-sm tab-active flex-1 text-center" role="tab" aria-selected="true">Alle Locks</button>
-                <button id="favoriteLocksTab" class="py-2 px-4 font-medium text-sm text-gray-500 hover:text-gray-700 flex-1 text-center" role="tab" aria-selected="false">Meine Tierliste</button>
+                <button id="favoriteLocksTab" class="py-2 px-4 font-medium text-sm text-gray-500 hover:text-gray-700 flex-1 text-center" role="tab" aria-selected="false">Meine Favoriten</button>
             </div>
             
             <!-- Search and Filters -->
@@ -612,7 +612,7 @@
                 <!-- Filters section that can be hidden -->
                 <div id="filtersSection" class="filters-section">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <select id="interpreterFilter" class="filter-input w-full px-4 focus:outline-none" aria-label="Interpret filtern"><option value="">Alle Interpreten</option><option value="Bayerische Leibgarde">Bayerische Leibgarde</option><option value="Brandenburgische Füsiliere">Brandenburgische Füsiliere</option><option value="Französische Musketiere">Französische Musketiere</option><option value="Kaiserliche Garde">Kaiserliche Garde</option><option value="Landsknechte von Basel">Landsknechte von Basel</option><option value="Preußische Grenadiere">Preußische Grenadiere</option><option value="Preußische Infanterie">Preußische Infanterie</option><option value="Sächsische Infanterie">Sächsische Infanterie</option></select>
+                        <select id="interpreterFilter" class="filter-input w-full px-4 focus:outline-none" aria-label="Interpret filtern"><option value="">Alle Trommlergruppen</option><option value="Bayerische Leibgarde">Bayerische Leibgarde</option><option value="Brandenburgische Füsiliere">Brandenburgische Füsiliere</option><option value="Französische Musketiere">Französische Musketiere</option><option value="Kaiserliche Garde">Kaiserliche Garde</option><option value="Landsknechte von Basel">Landsknechte von Basel</option><option value="Preußische Grenadiere">Preußische Grenadiere</option><option value="Preußische Infanterie">Preußische Infanterie</option><option value="Sächsische Infanterie">Sächsische Infanterie</option></select>
                         <select id="yearFilter" class="filter-input w-full px-4 focus:outline-none" aria-label="Jahr filtern"><option value="">Alle Jahrgänge</option><option value="1522">1522</option><option value="1615">1615</option><option value="1680">1680</option><option value="1703">1703</option><option value="1742">1742</option><option value="1745">1745</option><option value="1756">1756</option><option value="1760">1760</option></select>
                     </div>
                     <div class="flex flex-wrap gap-2 mb-4">
@@ -625,10 +625,9 @@
                         <div class="flex items-center">
                             <label for="sortOrder" class="mr-2 text-sm text-gray-500">Sortieren:</label>
                             <select id="sortOrder" class="filter-input px-3 text-sm focus:outline-none" aria-label="Sortieren nach">
-                                <option value="name">Name</option>
                                 <option value="year">Jahr ↑</option>
+                                <option value="name">Name</option>
                                 <option value="year-desc">Jahr ↓</option>
-                                <option value="interpreter">Interpret</option>
                             </select>
                         </div>
                     </div>
@@ -643,8 +642,8 @@
             <!-- Empty State for Favorites -->
             <div id="emptyFavorites" class="hidden text-center py-10 fade-in">
                 <i class="far fa-star text-gray-300 text-4xl mb-3"></i>
-                <h3 class="text-base font-medium">Keine Locks in deiner Tierliste</h3>
-                <p class="mt-1 text-sm text-gray-500">Füge Locks zu deiner Tierliste hinzu, indem du auf den Stern klickst.</p>
+                <h3 class="text-base font-medium">Keine Locks die dir besonders gefallen.</h3>
+                <p class="mt-1 text-sm text-gray-500">Füge Locks zu deinen Favoriten hinzu, indem du auf den Stern klickst.</p>
             </div>
             
             <!-- No Results State -->
@@ -725,7 +724,7 @@
                     <div class="flex justify-between items-center">
                         <button id="addToFavorites" class="btn-secondary flex items-center gap-2 py-2 px-4 text-sm" aria-pressed="false">
                     <i class="far fa-star"></i>
-                    <span>Zur Tierliste hinzufügen</span>
+                    <span>Zu Favoriten hinzufügen</span>
                 </button>
                         <a id="jahrgangsLink" href="https://example.com/jahrgaenge/1615" target="_blank" class="py-2 px-4 btn-primary text-sm flex items-center" aria-label="Zum Jahrgang">
                             <i class="fas fa-external-link-alt mr-2"></i>
@@ -747,7 +746,7 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <p class="mb-6 text-sm text-gray-600" style="color: var(--md-on-surface-variant);">Teile diese Lock-Sammlung mit anderen:</p>
+                <p class="mb-6 text-sm text-gray-600" style="color: var(--md-on-surface-variant);">Teile die Locksuche mit anderen:</p>
                 <div class="flex flex-col space-y-4">
                     <button class="btn-secondary py-3 px-4 flex items-center justify-center rounded-xl action-option" id="copyLinkBtn">
                         <i class="fas fa-link mr-3"></i>
@@ -5959,7 +5958,7 @@
     },
     {
         "interpret": "FSG",
-        "jahr": 1787,
+        "jahr": 1987,
         "category": "lock",
         "imgLink": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfo-OkkNgLF881jhdDtfR462Q5c_YemtMtnB3U5IhdNJXA1DEQc0Iu4GniHMX1y1uPB1A&usqp=CAU",
         "name": "Freude schöner Götterfunken",
@@ -6270,7 +6269,7 @@
             const url = encodeURIComponent(window.location.href);
             const textToCopy = `
                 ${currentLock.name}
-                Interpret: ${currentLock.interpret}
+                Trommlergruppe: ${currentLock.interpret}
                 Jahr: ${currentLock.jahr}
                 Kategorie: ${currentLock.category === 'lock' ? 'Lock' : 'Marsch'}
                 
@@ -6288,8 +6287,8 @@
 
         // Handle share via Email
         function handleShareEmail() {
-            const subject = encodeURIComponent('Historische Locks-Sammlung');
-            const body = encodeURIComponent(`Schau dir diese historische Locks-Sammlung an: ${window.location.href}`);
+            const subject = encodeURIComponent('Locksuche');
+            const body = encodeURIComponent(`Schau dir die Locksuche an: ${window.location.href}`);
             window.location.href = `mailto:?subject=${subject}&body=${body}`;
             closeShareModalWithAnimation();
         }
@@ -6317,7 +6316,7 @@
             // Create text to copy
             const textToCopy = `
                 ${currentLock.name}
-                Interpret: ${currentLock.interpret}
+                Tromlergruppe: ${currentLock.interpret}
                 Jahr: ${currentLock.jahr}
                 Kategorie: ${currentLock.category === 'lock' ? 'Lock' : 'Marsch'}
                 
@@ -6338,7 +6337,7 @@
         // Populate filter dropdowns efficiently
         function populateFilters() {
             // Clear existing options except the first one
-            interpreterFilter.innerHTML = '<option value="">Alle Interpreten</option>';
+            interpreterFilter.innerHTML = '<option value="">Alle Trommlergruppen</option>';
             yearFilter.innerHTML = '<option value="">Alle Jahrgänge</option>';
             
             // Get unique interpreters and years using Set for efficiency
@@ -6452,7 +6451,7 @@
             }
             
             if (interpreterFilter.value) {
-                addActiveFilter('Interpret: ' + interpreterFilter.value, () => {
+                addActiveFilter('Trommlergruppe: ' + interpreterFilter.value, () => {
                     interpreterFilter.value = '';
                     handleFilterChange();
                 });
@@ -6624,7 +6623,7 @@
             card.innerHTML = `
                 <div class="flex justify-between items-start mb-3">
                     <h3 class="font-medium">${lock.name}</h3>
-                    <button class="favorite-button ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? 'Aus Tierliste entfernen' : 'Zur Tierliste hinzufügen'}" aria-pressed="${isFavorite}">
+                    <button class="favorite-button ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'}" aria-pressed="${isFavorite}">
                         <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
                     </button>
                 </div>
@@ -6680,7 +6679,7 @@
                 favorites = favorites.filter(name => name !== lockName);
                 button.classList.remove('active');
                 button.setAttribute('aria-pressed', 'false');
-                button.setAttribute('aria-label', 'Zur Tierliste hinzufügen');
+                button.setAttribute('aria-label', 'Zu Favoriten hinzufügen');
                 button.innerHTML = '<i class="far fa-star"></i>';
                 
                 // If we're on the favorites tab, we might need to re-render
@@ -6688,16 +6687,16 @@
                     renderLocks();
                 }
                 
-                showToast('Aus Tierliste entfernt', 'info');
+                showToast('Aus Favoriten entfernt', 'info');
             } else {
                 // Add to favorites
                 favorites.push(lockName);
                 button.classList.add('active');
                 button.setAttribute('aria-pressed', 'true');
-                button.setAttribute('aria-label', 'Aus Tierliste entfernen');
+                button.setAttribute('aria-label', 'Aus Favoriten entfernen');
                 button.innerHTML = '<i class="fas fa-star"></i>';
                 
-                showToast('Zur Tierliste hinzugefügt', 'check');
+                showToast('Zu Favoriten hinzugefügt', 'check');
             }
             
             // Save to localStorage
@@ -6723,14 +6722,14 @@
                 addToFavorites.classList.add('active');
                 addToFavorites.innerHTML = `
                     <i class="fas fa-star"></i>
-                    <span>Aus Tierliste entfernen</span>
+                    <span>Aus Favoriten entfernen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'true');
             } else {
                 addToFavorites.classList.remove('active');
                 addToFavorites.innerHTML = `
                     <i class="far fa-star"></i>
-                    <span>Zur Tierliste hinzufügen</span>
+                    <span>Zu Favoriten hinzufügen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'false');
             }
@@ -6790,22 +6789,22 @@
                 addToFavorites.classList.remove('active');
                 addToFavorites.innerHTML = `
                     <i class="far fa-star"></i>
-                    <span>Zur Tierliste hinzufügen</span>
+                    <span>Zu Favoriten hinzufügen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'false');
                 
-                showToast('Aus Tierliste entfernt', 'info');
+                showToast('Aus Favoriten entfernt', 'info');
             } else {
                 // Add to favorites
                 favorites.push(currentLock.name);
                 addToFavorites.classList.add('active');
                 addToFavorites.innerHTML = `
                     <i class="fas fa-star"></i>
-                    <span>Aus Tierliste entfernen</span>
+                    <span>Aus Favoriten entfernen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'true');
                 
-                showToast('Zur Tierliste hinzugefügt', 'check');
+                showToast('Zu Favoriten hinzugefügt', 'check');
             }
             
             // Save to localStorage
@@ -6818,12 +6817,12 @@
                 if (isInFavorites(currentLock.name)) {
                     favoriteButton.classList.add('active');
                     favoriteButton.setAttribute('aria-pressed', 'true');
-                    favoriteButton.setAttribute('aria-label', 'Aus Tierliste entfernen');
+                    favoriteButton.setAttribute('aria-label', 'Aus Favoriten entfernen');
                     favoriteButton.innerHTML = '<i class="fas fa-star"></i>';
                 } else {
                     favoriteButton.classList.remove('active');
                     favoriteButton.setAttribute('aria-pressed', 'false');
-                    favoriteButton.setAttribute('aria-label', 'Zur Tierliste hinzufügen');
+                    favoriteButton.setAttribute('aria-label', 'Zu Favoriten hinzufügen');
                     favoriteButton.innerHTML = '<i class="far fa-star"></i>';
                 }
             }
